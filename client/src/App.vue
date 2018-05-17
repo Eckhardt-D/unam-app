@@ -1,10 +1,10 @@
 <template>
   <div id="app">
     <header>
-      <span>Vue.js PWA</span>
+      <span>2018 Exam preparations</span>
     </header>
     <main>
-      <img src="./assets/logo.png" alt="Vue.js PWA">
+      <img id="logo" src="./assets/logo.png" alt="Exam Prep">
       <router-view></router-view>
     </main>
   </div>
@@ -19,6 +19,17 @@ export default {
 <style>
 body {
   margin: 0;
+}
+
+#logo {
+  -webkit-transform: rotate(180deg);     /* Chrome and other webkit browsers */
+  -moz-transform: rotate(180deg);        /* FF */
+  -o-transform: rotate(180deg);          /* Opera */
+  -ms-transform: rotate(180deg);         /* IE9 */
+  transform: rotate(180deg);             /* W3C compliant browsers */
+
+  /* IE8 and below */
+  filter: progid:DXImageTransform.Microsoft.Matrix(M11=-1, M12=0, M21=0, M22=-1, DX=0, DY=0, SizingMethod='auto expand');
 }
 
 #app {

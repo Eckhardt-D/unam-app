@@ -1,31 +1,52 @@
 <template>
   <div class="hello">
-    <h1>{{ msg }}</h1>
-    <h2>Essential Links</h2>
-    <ul>
-      <li><a href="https://vuejs.org" target="_blank" rel="noopener">Core Docs</a></li>
-      <li><a href="https://forum.vuejs.org" target="_blank" rel="noopener">Forum</a></li>
-      <li><a href="http://chat.vuejs.org/" target="_blank" rel="noopener">Vue Community Chat</a></li>
-      <li><a href="https://twitter.com/vuejs" target="_blank" rel="noopener">Twitter</a></li>
-      <li><a href="http://vuejs-templates.github.io/webpack/" target="_blank" rel="noopener">Docs for This Template</a></li>
-    </ul>
-    <h2>Ecosystem</h2>
-    <ul>
-      <li><a href="http://router.vuejs.org/" target="_blank" rel="noopener">vue-router</a></li>
-      <li><a href="http://vuex.vuejs.org/" target="_blank" rel="noopener">vuex</a></li>
-      <li><a href="http://vue-loader.vuejs.org/" target="_blank" rel="noopener">vue-loader</a></li>
-      <li><a href="https://github.com/vuejs/awesome-vue" target="_blank" rel="noopener">awesome-vue</a></li>
-    </ul>
+    <div class="container">
+      <div v-for="(set, index) in chapterTwo" class="card questionBlock my-3" :key="set.q">
+        <p class="mt-2">{{ index + 1 }}: {{ set.q }}</p>
+        <textarea @focus="closeDialog(index)" v-model="answer[index]" class="form-control mx-2 my-2 w-75 mx-auto" type="text" name="answer" placeholder="please answer here"></textarea>
+        <button @click="runCheck(index)" class="btn btn-primary w-75 my-2 mx-2 mx-auto" type="button" name="button">Check your answer</button>
+          <div v-if="check[index]" class="alert alert-info mt-1 mx-3" role="alert">
+            <h3>The Correct answer is:</h3>
+            <p class="green">{{ set.a }}</p>
+            <p><small>Accuracy: {{ rating[index] }}%</small></p>
+        </div>
+      </div>
+    </div>
   </div>
-</template>
 
+</template>
 <script>
+import similarity from 'string-similarity'
+
 export default {
   name: 'hello',
   data () {
     return {
-      msg: 'Welcome to Your Vue.js PWA'
+      chapterTwo: this.$store.state.chapterTwo,
+      answer: [],
+      check: [],
+      rating: [],
+      overallRating: 0
     }
+  },
+  methods: {
+    runCheck(index) {
+      var s1 = this.answer[index].toString()
+      var s2 = this.chapterTwo[index].a;
+
+      var stringSimilarity = similarity.compareTwoStrings(s1, s2);
+      this.rating[index] = (stringSimilarity * 100).toString().slice(0, 4)
+
+      for(var i = 0; i < this.chapterTwo.length; i++){
+        this.check.push(false)
+      }
+      this.check[index] = true
+    },
+    closeDialog(index) {
+      for (var i =0; i < this.check.length; i++){
+        this.check[i] = false
+      }
+    },
   }
 }
 </script>
